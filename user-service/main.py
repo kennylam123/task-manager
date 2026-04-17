@@ -8,11 +8,13 @@ import os
 from jose import jwt
 from datetime import datetime, timedelta
 
+# Database setup
 DATABASE_URL="sqlite:///./users.db"
 engine=create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+# JWT config
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-local-dev-key")
 ALGORITHM="HS256"
 
@@ -24,6 +26,7 @@ class User(Base):
 
 Base.metadata.create_all(bind=engine)
 
+# pydantic schemas
 class UserCreate(BaseModel):
     email: str
     password: str
