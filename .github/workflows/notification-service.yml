@@ -1,0 +1,27 @@
+name: Notification Service CI/CD
+
+on:
+  push:
+    paths:
+      - "notification-service/**"
+
+jobs:
+  build-and-push:
+    runs-on: ubunutu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./notification-service
+          push: true
+          tags: kennylam5/notification-service:latest
