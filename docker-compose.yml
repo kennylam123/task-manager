@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  user-service:
+    build: ./user-service
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+    ports:
+      - "8000:8000"
+
+  task-service:
+    build: ./task-service
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+    ports:
+      - "8001:8000"
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8002:8000"
+
+  api-gateway:
+    build: ./api-gateway
+    environment:
+      - USER_SERVICE_URL=http://user-service:8000
+      - TASK_SERVICE_URL=http://task-service:8000
+      - NOTIFICATION_SERVICE_URL=http://notification-service:8000
+    ports:
+      - "8003:8000"
+    depends_on:
+      - user-service
+      - task-service
+      - notification-service
